@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Search, TrendingUp, BarChart2 } from 'lucide-react';
+import { Search, TrendingUp, BarChart2, Clock } from 'lucide-react';
 import { StockAnalysis, AnalysisResponse } from './types';
 import { StockCard } from './components/StockCard';
 import { Loader } from './components/Loader';
@@ -15,6 +15,24 @@ export default function App() {
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      setCurrentTime(new Date().toLocaleString('ko-KR', { 
+        timeZone: 'Asia/Seoul',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }));
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchAnalysis = async (stock = '') => {
     setLoading(true);
@@ -62,9 +80,15 @@ export default function App() {
               <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">30-Year Expert Strategy</p>
             </div>
           </div>
-          <div className="hidden sm:flex items-center space-x-2 text-xs text-slate-400 font-mono">
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
-            <span>KOSPI / KOSDAQ 52W LOW</span>
+          <div className="hidden sm:flex flex-col items-end justify-center space-y-1">
+            <div className="flex items-center space-x-2 text-xs text-slate-400 font-mono">
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <span>KOSPI / KOSDAQ 52W LOW</span>
+            </div>
+            <div className="flex items-center space-x-1.5 text-xs text-blue-400/80 font-mono bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+              <Clock className="w-3 h-3" />
+              <span>{currentTime}</span>
+            </div>
           </div>
         </div>
       </header>

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { TrendingDown, TrendingUp, AlertTriangle, Crosshair, Target, Shield, Info } from 'lucide-react';
 import { StockAnalysis } from '../types';
 
-export function StockCard({ stock, index }: { stock: StockAnalysis; index: number }) {
+export function StockCard({ stock, index }: { stock: StockAnalysis; index: number; key?: React.Key }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
