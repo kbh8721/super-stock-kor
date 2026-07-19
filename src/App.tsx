@@ -12,6 +12,7 @@ import { motion } from 'motion/react';
 
 export default function App() {
   const [targetStock, setTargetStock] = useState('');
+  const [budget, setBudget] = useState('');
   const [market, setMarket] = useState<'KR' | 'US'>('KR');
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export default function App() {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetStock: stock, market: currentMarket }),
+        body: JSON.stringify({ targetStock: stock, market: currentMarket, budget: budget }),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -134,7 +135,7 @@ export default function App() {
             </div>
           </div>
           
-          <form onSubmit={handleSearch} className="flex gap-3">
+                    <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-slate-500" />
@@ -143,8 +144,17 @@ export default function App() {
                 type="text"
                 value={targetStock}
                 onChange={(e) => setTargetStock(e.target.value)}
-                placeholder={`종목명 또는 종목코드 입력 (비워두면 Top 9 추천)`}
+                placeholder={`종목명 또는 종목코드 입력 (비워두면 추천)`}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-xl bg-slate-950/50 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+              />
+            </div>
+            <div className="relative w-full sm:w-48">
+              <input
+                type="text"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                placeholder="보유 현금 (예: 1000만원)"
+                className="block w-full px-3 py-3 border border-slate-700 rounded-xl bg-slate-950/50 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
               />
             </div>
             <button
