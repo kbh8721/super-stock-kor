@@ -12,8 +12,7 @@ import { motion } from 'motion/react';
 
 export default function App() {
   const [targetStock, setTargetStock] = useState('');
-  const [budget, setBudget] = useState('');
-  const [market, setMarket] = useState<'KR' | 'US'>('KR');
+    const [market, setMarket] = useState<'KR' | 'US'>('KR');
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +39,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams({ targetStock: stock, market: currentMarket, budget: budget }).toString();
+      const query = new URLSearchParams({ targetStock: stock, market: currentMarket,  }).toString();
       const response = await fetch('/api/analyze?' + query);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -145,15 +144,7 @@ export default function App() {
                 className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-xl bg-slate-950/50 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
               />
             </div>
-            <div className="relative w-full sm:w-48">
-              <input
-                type="text"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
-                placeholder="보유 현금 (예: 1000만원)"
-                className="block w-full px-3 py-3 border border-slate-700 rounded-xl bg-slate-950/50 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-              />
-            </div>
+
             <button
               type="submit"
               disabled={loading}

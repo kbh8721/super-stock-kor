@@ -14,8 +14,7 @@ async function startServer() {
     const body = req.query || {};
     const targetStock = body.targetStock || '';
     const market = body.market || 'KR'; // 'KR' or 'US'
-    const budget = body.budget || '';
-
+    
     const dictionary: Record<string, string> = {
       '삼성전자': '005930.KS',
       'NAVER': '035420.KS',
@@ -125,7 +124,6 @@ async function startServer() {
 가장 중요한 점은 **반드시 구글 검색 도구(Google Search grounding)를 활용하여 오늘 날짜 기준의 실제 최신 주가를 검색하여 반영**해야 한다는 것입니다. 임의로 지어낸 과거 가격을 사용하지 마세요.
 [가장 중요한 경고]: 사용자가 요청한 시장(${marketName}) 내에 있는 종목으로만 구성해야 합니다. 절대 다른 시장의 종목(예: 한국 시장인데 미국 주식 포함, 미국 시장인데 한국 주식 포함)을 혼용해서는 안 됩니다. 100% 요청된 시장의 종목만 반환하세요.
 
-${budget ? `[예산 조건]: 사용자의 보유 현금은 ${budget}입니다. 포트폴리오를 구성할 때 이 예산 내에서 매수 가능한 주식(1주 이상)을 고려해 주시고, 비싼 주식이라면 비중을 어떻게 가져갈지도 반영해 추천해 주세요.` : ''}
 ${targetStock 
   ? `사용자가 특정 종목을 요청했습니다: "${targetStock}" ${fetchedPriceStr ? `(현재가: ${fetchedPriceStr})` : ''}. 이 종목이 위 기준(가격 변동폭 대비 매수 타점)에 부합한다면 분석하고(topStocks 배열에 1개로 포함), 그렇지 않다면 기준에 부합하는 가장 유력한 우량주 1개를 대신 분석하여 반환하라. 추가 추천 종목(additionalRecommendations)에는 연관된 우량주 2개를 제시하라.` 
   : `사용자가 종목을 지정하지 않았습니다. 현재 시점에서 가격 변동폭 대비 매수하기 가장 좋은 우량주 Top 9를 찾아 분석(topStocks 배열에 9개 포함)하고, 추가 추천 종목 5개(additionalRecommendations)를 제시하라.`}
