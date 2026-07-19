@@ -20,15 +20,9 @@ export default function App() {
 
   useEffect(() => {
     const updateTime = () => {
-      setCurrentTime(new Date().toLocaleString('ko-KR', { 
-        timeZone: 'Asia/Seoul',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }));
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      setCurrentTime(`${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`);
     };
     updateTime();
     const timer = setInterval(updateTime, 1000);
@@ -39,8 +33,11 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams({ targetStock: stock, market: currentMarket,  }).toString();
-      const response = await fetch('/api/analyze?' + query);
+      const response = await fetch(window.location.origin + '/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetStock: stock, market: currentMarket })
+      });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || '분석 데이터를 가져오는데 실패했습니다.');

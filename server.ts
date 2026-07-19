@@ -10,8 +10,8 @@ async function startServer() {
   app.use(express.json());
 
   // API Routes
-  app.get('/api/analyze', async (req, res) => {
-    const body = req.query || {};
+  app.post('/api/analyze', async (req, res) => {
+    const body = req.body || {};
     const targetStock = body.targetStock || '';
     const market = body.market || 'KR'; // 'KR' or 'US'
     
