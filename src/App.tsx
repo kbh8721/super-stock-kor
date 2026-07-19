@@ -40,11 +40,8 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetStock: stock, market: currentMarket, budget: budget }),
-      });
+      const query = new URLSearchParams({ targetStock: stock, market: currentMarket, budget: budget }).toString();
+      const response = await fetch('/api/analyze?' + query);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || '분석 데이터를 가져오는데 실패했습니다.');

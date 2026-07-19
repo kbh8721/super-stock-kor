@@ -10,10 +10,11 @@ async function startServer() {
   app.use(express.json());
 
   // API Routes
-  app.post('/api/analyze', async (req, res) => {
-    const targetStock = req.body.targetStock || '';
-    const market = req.body.market || 'KR'; // 'KR' or 'US'
-    const budget = req.body.budget || '';
+  app.get('/api/analyze', async (req, res) => {
+    const body = req.query || {};
+    const targetStock = body.targetStock || '';
+    const market = body.market || 'KR'; // 'KR' or 'US'
+    const budget = body.budget || '';
 
     const dictionary: Record<string, string> = {
       '삼성전자': '005930.KS',
