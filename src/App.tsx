@@ -12,6 +12,7 @@ import { motion } from 'motion/react';
 
 export default function App() {
   const [targetStock, setTargetStock] = useState('');
+  const [market, setMarket] = useState<'KR' | 'US'>('KR');
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,14 +35,14 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
-  const fetchAnalysis = async (stock = '') => {
+  const fetchAnalysis = async (stock = '', currentMarket = market) => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetStock: stock }),
+        body: JSON.stringify({ targetStock: stock, market: currentMarket }),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -63,7 +64,13 @@ export default function App() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchAnalysis(targetStock);
+    fetchAnalysis(targetStock, market);
+  };
+
+  const handleMarketChange = (newMarket: 'KR' | 'US') => {
+    setMarket(newMarket);
+    setTargetStock('');
+    fetchAnalysis('', newMarket);
   };
 
   return (
@@ -83,7 +90,7 @@ export default function App() {
           <div className="hidden sm:flex flex-col items-end justify-center space-y-1">
             <div className="flex items-center space-x-2 text-xs text-slate-400 font-mono">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
-              <span>KOSPI / KOSDAQ 52W LOW</span>
+              <span>{market === 'KR' ? 'KOSPI / KOSDAQ 52W LOW' : 'NASDAQ / NYSE 52W LOW'}</span>
             </div>
             <div className="flex items-center space-x-1.5 text-xs text-blue-400/80 font-mono bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
               <Clock className="w-3 h-3" />
@@ -96,10 +103,37 @@ export default function App() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {/* Search / Control Panel */}
         <div className="mb-10 bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl">
-          <h2 className="text-xl font-medium text-slate-200 mb-2">종목 스크리닝 및 정밀 분석</h2>
-          <p className="text-sm text-slate-400 mb-6">
-            현재 52주 신저점 부근에 위치한 우량주 중, 기술적·수급적 반등 타점이 가장 명확한 종목을 발굴합니다. 특정 종목의 분석을 원하시면 아래에 입력하세요.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+            <div>
+              <h2 className="text-xl font-medium text-slate-200 mb-1">종목 스크리닝 및 정밀 분석</h2>
+              <p className="text-sm text-slate-400">
+                현재 52주 신저점 부근에 위치한 우량주 중, 기술적·수급적 반등 타점이 가장 명확한 종목을 발굴합니다.
+              </p>
+            </div>
+            <div className="flex bg-slate-800/50 p-1 rounded-lg border border-slate-700/50 shrink-0">
+              <button
+                onClick={() => handleMarketChange('KR')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  market === 'KR' 
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                }`}
+              >
+                대한민국장
+              </button>
+              <button
+                onClick={() => handleMarketChange('US')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  market === 'US' 
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                }`}
+              >
+                미국장
+              </button>
+            </div>
+          </div>
+          
           <form onSubmit={handleSearch} className="flex gap-3">
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -109,7 +143,7 @@ export default function App() {
                 type="text"
                 value={targetStock}
                 onChange={(e) => setTargetStock(e.target.value)}
-                placeholder="종목명 또는 종목코드 입력 (비워두면 Top 3 추천)"
+                placeholder={`종목명 또는 종목코드 입력 (비워두면 Top 9 추천)`}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-xl bg-slate-950/50 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
               />
             </div>
