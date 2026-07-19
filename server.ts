@@ -213,9 +213,9 @@ ${targetStock
       res.json(json);
 
     } catch (error: any) {
-      const errStr = String(error.message || error).toLowerCase();
-      if (errStr.includes('429') || errStr.includes('quota') || errStr.includes('400') || errStr.includes('503') || errStr.includes('resource_exhausted')) {
-        console.log("Using mock data due to API limit.");
+      console.error('Error generating analysis:', error);
+      console.log("Falling back to mock data due to error.");
+      if (true) {
         
         const dictionary: Record<string, string> = {
           '삼성전자': '005930.KS',
