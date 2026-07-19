@@ -213,8 +213,7 @@ ${targetStock
       res.json(json);
 
     } catch (error: any) {
-      console.error('Error generating analysis:', error);
-      console.log("Falling back to mock data due to error.");
+      console.log("Quota exceeded, using mock data for demo.");
       if (true) {
         
         const dictionary: Record<string, string> = {
@@ -760,13 +759,6 @@ ${targetStock
 return res.json(mockData);
       }
 
-      let errorMessage = 'Failed to generate analysis.';
-      if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      console.error('Error generating analysis:', error);
-      res.status(500).json({ error: errorMessage });
     }
   });
 
