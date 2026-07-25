@@ -121,7 +121,7 @@ async function startServer() {
 
 금지사항: 절대 미래 가격을 보장하거나 “무조건 오른다”, “대박” 같은 표현 사용 금지. 균형 잡힌 분석 제공.
 추가 원칙: 현재 주가(currentPrice)를 반드시 파악하고, 이를 기준으로 매수 타점, 익절/손절 라인을 설정할 것. 
-가장 중요한 점은 **반드시 구글 검색 도구(Google Search grounding)를 활용하여 오늘 날짜 기준의 실제 최신 주가를 검색하여 반영**해야 한다는 것입니다. 임의로 지어낸 과거 가격을 사용하지 마세요.
+제공된 현재가(fetchedPriceStr)를 바탕으로 분석하세요. 임의로 지어낸 과거 가격을 사용하지 마세요.
 [가장 중요한 경고]: 사용자가 요청한 시장(${marketName}) 내에 있는 종목으로만 구성해야 합니다. 절대 다른 시장의 종목(예: 한국 시장인데 미국 주식 포함, 미국 시장인데 한국 주식 포함)을 혼용해서는 안 됩니다. 100% 요청된 시장의 종목만 반환하세요.
 
 ${targetStock 
@@ -196,7 +196,7 @@ ${targetStock
         contents: personaPrompt,
         config: {
           responseSchema: responseSchema,
-          tools: [{ googleSearch: {} }],
+          // tools: [{ googleSearch: {} }],
         },
       });
 

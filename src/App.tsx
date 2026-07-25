@@ -40,7 +40,7 @@ export default function App() {
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || '분석 데이터를 가져오는데 실패했습니다.');
+        throw new Error(errorData.error || `에러 발생: HTTP ${response.status}. 분석 데이터를 가져오는데 실패했습니다.`);
       }
       const result = await response.json();
       setData(result);
