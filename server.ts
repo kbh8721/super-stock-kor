@@ -193,7 +193,7 @@ ${targetStock
       };
 
       const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash',
         contents: personaPrompt,
         config: {
           responseSchema: responseSchema,
@@ -213,7 +213,7 @@ ${targetStock
       res.json(json);
 
     } catch (error: any) {
-      console.error(error); console.log("Quota exceeded, using mock data for demo.");
+      console.log("Quota exceeded, using mock data for demo.");
       if (true) {
         
         const dictionary: Record<string, string> = {
