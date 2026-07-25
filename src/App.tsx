@@ -33,7 +33,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(window.location.origin + '/api/analyze', {
+      const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetStock: stock, market: currentMarket })

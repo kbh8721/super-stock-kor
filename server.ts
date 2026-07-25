@@ -96,7 +96,7 @@ async function startServer() {
     try {
       const apiKey = process.env.GEMINI_API_KEY;
       if (!apiKey) {
-        return res.status(500).json({ error: 'GEMINI_API_KEY is missing.' });
+        throw new Error('GEMINI_API_KEY is missing.');
       }
 
       const ai = new GoogleGenAI({ apiKey });
