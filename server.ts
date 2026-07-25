@@ -193,7 +193,7 @@ ${targetStock
       };
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash',
         contents: personaPrompt,
         config: {
           responseSchema: responseSchema,
@@ -213,7 +213,7 @@ ${targetStock
       res.json(json);
 
     } catch (error: any) {
-      console.log("Quota exceeded, using mock data for demo.");
+      console.error(error); console.log("Quota exceeded, using mock data for demo.");
       if (true) {
         
         const dictionary: Record<string, string> = {
@@ -325,8 +325,8 @@ ${targetStock
               low52Week: { price: formatPrice(low52), date: "2025-01-15" },
               high52Week: { price: formatPrice(high52), date: "2024-10-10" },
               reasons: [
-                "최근 낙폭 과대 후 바닥에서 다중 바닥 패턴 형성 중",
-                "주요 이평선 수렴 구간에서 기술적 반등 시그널 포착"
+                "[2차적 사고] 대중은 최근 실적 둔화와 금리 지연으로 비관론에 빠져 과도한 매도세를 보였으나, 이는 이미 주가에 100% 선반영됨",
+                "[2차적 사고] 시장은 단기 노이즈에 집중하지만, 실제 기관 자금은 오히려 저가 매집 중이며 펀더멘털 대비 극심한 저평가 상태 (역발상 기회)"
               ],
               strategy: {
                 buyRange: `${formatPrice(currentPrice * 0.98)} ~ ${formatPrice(currentPrice * 1.02)}`,
@@ -336,8 +336,8 @@ ${targetStock
                 maxPeriod: "2개월",
                 riskReward: "1:2.5"
               },
-              chartPoints: "단기 이평선이 장기 이평선을 뚫는 골든크로스 직전 국면.",
-              risks: ["글로벌 금리 인하 지연", "시장 수급 쏠림 현상 심화 가능성"]
+              chartPoints: "다수가 투매하는 공포의 구간에서 발생하는 '클라이맥스 바닥' 형성. 대중의 오해가 풀리는 순간 급반등할 수 있는 변곡점.",
+              risks: ["대중의 극단적 비관론이 예상보다 오래 지속될 위험", "단기적인 매크로 공포에 따른 변동성"]
             }
           ] : (market === 'US' ? [
             {
@@ -348,7 +348,7 @@ ${targetStock
               suitability: getSuitability(defaultScore1),
               low52Week: { price: formatPrice(low52 || 165), date: "2025-01-15" },
               high52Week: { price: formatPrice(high52 || 237), date: "2024-10-10" },
-              reasons: ["AI 기능 통합에 따른 교체 수요 기대", "안정적인 현금 흐름 및 자사주 매입"],
+              reasons: ["[2차적 사고] 모두가 AI 혁신에만 환호하여 주가 프리미엄이 붙었지만, 향후 교체 주기가 늘어날 것이란 시장의 공포가 주가를 억누름. 그러나 실제 생태계 락인 효과가 하방을 방어함", "[2차적 사고] 1차적 사고를 하는 투자자들은 중국 부진에만 집중하나, 실제 이익 방어력은 여전히 견고함"],
               strategy: {
                 buyRange: `${formatPrice((currentPrice || 230) * 0.98)} ~ ${formatPrice((currentPrice || 230) * 1.02)}`,
                 stopLoss: { percent: -5, price: formatPrice((currentPrice || 230) * 0.95) },
@@ -357,8 +357,8 @@ ${targetStock
                 maxPeriod: "2개월",
                 riskReward: "1:3"
               },
-              chartPoints: "핵심 지지선 도달 후 반등 시도",
-              risks: ["중국 시장 매출 부진 장기화"]
+              chartPoints: "시장의 과도한 낙관(고점)과 비관(저점) 사이에서 핵심 지지선 도달 후 반등 시도. 대중의 매도세가 소진됨.",
+              risks: ["중국 시장 매출 부진 장기화라는 '시장에 널리 알려진 악재'가 실제 펀더멘털을 훼손할 가능성"]
             },
             {
               name: "Microsoft",
@@ -368,7 +368,7 @@ ${targetStock
               suitability: getSuitability(defaultScore2),
               low52Week: { price: formatPrice(skInfo?.low || 350), date: "2025-01-10" },
               high52Week: { price: formatPrice(skInfo?.high || 468), date: "2024-09-01" },
-              reasons: ["클라우드(Azure) 성장세 지속", "Copilot 수익화 본격화"],
+              reasons: ["[2차적 사고] 대중은 AI 수익화 지연 우려에 매도했지만, B2B 생태계 장악력은 여전히 과소평가 됨", "모두가 두려워할 때 모아가는 전형적인 역발상 매수 구간"],
               strategy: {
                 buyRange: `${formatPrice((skInfo?.price || 420) * 0.98)} ~ ${formatPrice((skInfo?.price || 420) * 1.02)}`,
                 stopLoss: { percent: -7, price: formatPrice((skInfo?.price || 420) * 0.93) },
@@ -377,8 +377,8 @@ ${targetStock
                 maxPeriod: "3개월",
                 riskReward: "1:3.5"
               },
-              chartPoints: "신고가 갱신 후 눌림목 지지선 형성",
-              risks: ["AI 투자 대비 수익성 우려"]
+              chartPoints: "시장 참여자들의 단기 차익 실현 욕구가 소화된 후 나타나는 눌림목으로, 군중 심리와 반대로 갈 수 있는 기회",
+              risks: ["시장의 컨센서스(AI 투자 수익성 우려)가 실제 장기 실적으로 증명될 경우의 리스크"]
             },
             {
               name: "Nvidia",
@@ -388,7 +388,7 @@ ${targetStock
               suitability: getSuitability(defaultScore3),
               low52Week: { price: formatPrice(hyundaiInfo?.low || 75), date: "2024-12-01" },
               high52Week: { price: formatPrice(hyundaiInfo?.high || 140), date: "2025-05-01" },
-              reasons: ["독보적인 AI 칩 시장 점유율", "블랙웰 아키텍처 수요 견조"],
+              reasons: ["[2차적 사고] 모두가 사이클 고점을 논하며 팔고 떠나려 할 때, 실질적인 수요의 폭발은 이제 막 기업의 현금흐름으로 꽂히기 시작함", "[2차적 사고] 1차적 사고로는 빅테크들의 투자 축소를 두려워하지만, AI 인프라 경쟁은 선택이 아닌 생존의 문제라 칩 수요는 쉽게 꺾이지 않음"],
               strategy: {
                 buyRange: `${formatPrice((hyundaiInfo?.price || 125) * 0.98)} ~ ${formatPrice((hyundaiInfo?.price || 125) * 1.02)}`,
                 stopLoss: { percent: -6, price: formatPrice((hyundaiInfo?.price || 125) * 0.94) },
@@ -397,8 +397,8 @@ ${targetStock
                 maxPeriod: "3개월",
                 riskReward: "1:2.8"
               },
-              chartPoints: "장기 이평선 지지받고 우상향 추세 재진입",
-              risks: ["미중 갈등에 따른 수출 규제"]
+              chartPoints: "과열된 투심이 완전히 식어버린 자리에서 기관들이 조용히 비중을 늘리는 스마트머니 유입 구간",
+              risks: ["대중이 우려하는 미중 갈등 악재가 실제 펀더멘털을 강타할 리스크"]
             },
             {
               name: "Amazon",
